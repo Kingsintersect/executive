@@ -71,3 +71,28 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
 Nest is [MIT licensed](LICENSE).
+
+
+
+
+
+
+
+
+
+## CREATOR DEFINED
+Switching Databases
+
+- To switch between MySQL and MongoDB, update the DB_TYPE variable in your .env file:
+
+For MySQL:
+- DB_TYPE=mysql
+- DB_HOST=localhost
+- DB_PORT=3306
+- DB_USERNAME=root
+- DB_PASSWORD=password
+- DB_NAME=test
+- 
+For MongoDB:
+- DB_TYPE=mongodb
+- DB_URI=mongodb://localhost/nest
