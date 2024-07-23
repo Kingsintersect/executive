@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
-// import { UserModule } from './users/user.module';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { UserModule } from './users/user.module';
 import * as Joi from 'joi';
-import { MongodbDatabaseModule } from 'src/common';
-import { ProductsModule } from './products/products.module';
+// import { ProductsModule } from './products/products.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { getTypeOrmConfig } from './config/typeorm-config';
 
 @Module({
   imports: [
@@ -22,10 +23,13 @@ import { ProductsModule } from './products/products.module';
       }),
       envFilePath: '.env',
     }),
-    // UserModule,
-    // MysqlDatabaseModule,
-    MongodbDatabaseModule,
-    ProductsModule,
+    UserModule,
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => await getTypeOrmConfig(configService),
+      inject: [ConfigService],
+    }),
+    // ProductsModule,
   ],
 })
 export class AppModule { }

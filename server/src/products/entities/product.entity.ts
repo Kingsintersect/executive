@@ -1,8 +1,9 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { AbstractDocument } from "src/common/database/mongodb/abstract.schema";
+import { AbstractEntity } from "src/common/database/mysql/abstract.entity";
+// import { AbstractDocument } from "src/common/database/mongodb/abstract.schema";
 
 @Schema({ timestamps: true })
-export class Product extends AbstractDocument {
+export class Product extends AbstractEntity {
 
    @Prop({ required: true })
    title: string;
