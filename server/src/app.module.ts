@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { UserModule } from './users/user.module';
-import { DatabaseModule } from './common/database/database.module';
+// import { UserModule } from './users/user.module';
 import * as Joi from 'joi';
+import { MongodbDatabaseModule } from 'src/common';
+import { ProductsModule } from './products/products.module';
 
 @Module({
   imports: [
@@ -21,8 +22,10 @@ import * as Joi from 'joi';
       }),
       envFilePath: '.env',
     }),
-    UserModule,
-    DatabaseModule,
+    // UserModule,
+    // MysqlDatabaseModule,
+    MongodbDatabaseModule,
+    ProductsModule,
   ],
 })
 export class AppModule { }
