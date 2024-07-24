@@ -2,9 +2,10 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UserModule } from './users/user.module';
 import * as Joi from 'joi';
-// import { ProductsModule } from './products/products.module';
+import { ProductsModule } from './products/products.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { getTypeOrmConfig } from './config/typeorm-config';
+import { initializeGlobalConfig } from './config/global-config';
 
 @Module({
   imports: [
@@ -23,13 +24,22 @@ import { getTypeOrmConfig } from './config/typeorm-config';
       }),
       envFilePath: '.env',
     }),
-    UserModule,
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => await getTypeOrmConfig(configService),
+      useFactory: async (configService: ConfigService) => {
+        initializeGlobalConfig(configService);
+        return await getTypeOrmConfig(configService)
+      },
       inject: [ConfigService],
     }),
-    // ProductsModule,
+    UserModule,
+    ProductsModule,
   ],
 })
-export class AppModule { }
+export class AppModule {
+  constructor(private readonly configService: ConfigService) { }
+
+  onModuleInit() {
+    initializeGlobalConfig(this.configService); // Ensure global config is initialized
+  }
+}

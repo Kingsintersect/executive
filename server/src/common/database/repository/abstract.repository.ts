@@ -1,7 +1,8 @@
 import { Logger, NotFoundException } from "@nestjs/common";
-import { AbstractEntity } from "./abstract.entity";
 import { FindOneOptions, FindOptionsWhere, Repository, UpdateResult } from "typeorm";
 import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity";
+import { AbstractEntity } from "./abstract.entity";
+// import { MongoEntity } from "./mongo.entity";
 
 export abstract class AbstractRepository<TRecord extends AbstractEntity> {
    protected abstract readonly logger: Logger;

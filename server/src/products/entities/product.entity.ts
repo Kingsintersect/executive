@@ -1,39 +1,14 @@
-import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { AbstractEntity } from "src/common/database/mysql/abstract.entity";
-// import { AbstractDocument } from "src/common/database/mongodb/abstract.schema";
+import { AbstractEntity } from 'src/common/database/repository/abstract.entity';
+import { Entity, Column } from 'typeorm';
 
-@Schema({ timestamps: true })
+@Entity()
 export class Product extends AbstractEntity {
-
-   @Prop({ required: true })
+   @Column()
    title: string;
 
-   @Prop({ required: true })
+   @Column()
    description: string;
 
-   @Prop({ required: true })
+   @Column()
    price: number;
-
 }
-
-export const ProductSchema = SchemaFactory.createForClass(Product);
-
-
-
-
-
-
-// import { AbstractEntity } from 'src/common/database/mysql/abstract.entity';
-// import { Entity, Column } from 'typeorm';
-
-// @Entity()
-// export class Product extends AbstractEntity {
-//    @Column()
-//    title: string;
-
-//    @Column()
-//    description: string;
-
-//    @Column()
-//    price: number;
-// }
