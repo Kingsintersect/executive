@@ -1,6 +1,6 @@
 import { Transform } from "class-transformer";
 import { IsDate, IsEmail, IsEnum, IsNotEmpty, IsOptional, IsString, MinLength } from "class-validator";
-import { UserRole } from "../types/generic.types";
+import { UserRole } from "../../shared/types/generic.types";
 
 export class AuthDto {
    @IsEmail()
@@ -21,7 +21,7 @@ export class AuthDto {
 
    @IsEnum(UserRole)
    @IsOptional()
-   @Transform(({ value }) => value ? value : UserRole.GUEST, { toClassOnly: true })  // Set default value
+   @Transform(({ value }) => value ? value : UserRole.USER, { toClassOnly: true })  // Set default value
    userRole?: UserRole;
 
    @IsDate()

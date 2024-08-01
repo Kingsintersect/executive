@@ -16,7 +16,7 @@ export class UsersProfileService {
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} usersProfile`;
+    return `This action returns a #${id} usersProfile with id`;
   }
 
   update(id: number, updateUserDto: UpdateUsersProfileDto) {

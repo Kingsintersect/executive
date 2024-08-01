@@ -8,6 +8,7 @@ import { AuthModule } from './auth/auth.module';
 import { PasswordResetModule } from './reset-password/reset-password.module';
 import { UsersProfileModule } from './users-profile/users-profile.module';
 import { JwtModule } from '@nestjs/jwt';
+import { SharedModule } from './shared/shared.module';
 
 @Module({
   imports: [
@@ -51,7 +52,10 @@ import { JwtModule } from '@nestjs/jwt';
     AuthModule,
     UsersProfileModule,
     PasswordResetModule,
+    SharedModule,
   ],
+  providers: [
+  ]
 })
 export class AppModule {
   constructor(private readonly configService: ConfigService) { }

@@ -1,7 +1,7 @@
 import { Min } from 'class-validator';
 import { AbstractEntity } from 'src/common/database/repository/abstract.entity';
 import { Entity, Column, } from 'typeorm';
-import { UserRole } from '../types/generic.types';
+import { UserRole } from '../../shared/types/generic.types';
 
 @Entity()
 export class User extends AbstractEntity {
@@ -19,7 +19,7 @@ export class User extends AbstractEntity {
    @Column({
       type: "enum",
       enum: UserRole,
-      default: UserRole.GUEST,
+      default: UserRole.USER,
    })
    userRole?: string;
 
