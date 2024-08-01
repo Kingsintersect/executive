@@ -8,7 +8,7 @@ import { RolesGuard } from 'src/shared/guards/roles.guard';
 import { JwtAuthGuard } from 'src/shared/guards/jwt-auth.guard';
 
 @Controller('users-profile')
-
+@UseGuards(JwtAuthGuard, RolesGuard)
 export class UsersProfileController {
   constructor(private readonly usersProfileService: UsersProfileService) { }
 
@@ -39,28 +39,28 @@ export class UsersProfileController {
 
 
   @Get('admin')
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  // @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN)
   getAdminData(@Req() req: any) {
     return { superAdmin: req.user, message: "super admin roll accessed" };
   }
 
   @Get('manager')
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  // @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.MANAGER, UserRole.ADMIN)
   getManagerData() {
     return 'This route is allowed for managers';
   }
 
   @Get('editor')
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  // @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.EDITOR, UserRole.MANAGER, UserRole.ADMIN)
   getEditorData() {
     return 'This route is allowed for editor';
   }
 
   @Get('guest')
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  // @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.GUEST, UserRole.EDITOR, UserRole.MANAGER, UserRole.ADMIN)
   getUserData() {
     return 'This route is allowed for guests';
