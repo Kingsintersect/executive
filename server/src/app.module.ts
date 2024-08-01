@@ -1,11 +1,13 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { UserModule } from './users/user.module';
 import * as Joi from 'joi';
-import { ProductsModule } from './products/products.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { getTypeOrmConfig } from './config/typeorm-config';
 import { initializeGlobalConfig } from './config/global-config';
+import { AuthModule } from './auth/auth.module';
+import { PasswordResetModule } from './reset-password/reset-password.module';
+import { UsersProfileModule } from './users-profile/users-profile.module';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -21,8 +23,22 @@ import { initializeGlobalConfig } from './config/global-config';
         DB_PASSWORD: Joi.string().allow(''), // allowed for empty password; .default('password'),
         DB_NAME: Joi.string().default('test'),
         DB_URI: Joi.string().optional(),
+
+        JWT_SECRET: Joi.string().required(),
+        JWT_AUTH_EXPIRATION: Joi.string().required(),
       }),
       envFilePath: '.env',
+    }),
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        secret: configService.get<string>('JWT_SECRET'),
+        signOptions: {
+          expiresIn: `${configService.get<number>('JWT_AUTH_EXPIRATION', 3600)}s`,
+        },
+      }),
+      inject: [ConfigService],
+      global: true,
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
@@ -32,8 +48,9 @@ import { initializeGlobalConfig } from './config/global-config';
       },
       inject: [ConfigService],
     }),
-    UserModule,
-    ProductsModule,
+    AuthModule,
+    UsersProfileModule,
+    PasswordResetModule,
   ],
 })
 export class AppModule {

@@ -85,14 +85,16 @@ Switching Databases
 
 - To switch between MySQL and MongoDB, update the DB_TYPE variable in your .env file:
 
-For MySQL:
-- DB_TYPE=mysql
+GENERAL DATABASE SETTINGS
+- DB_TYPE=mysql  # or mongodb or mysql
 - DB_HOST=localhost
-- DB_PORT=3306
-- DB_USERNAME=root
-- DB_PASSWORD=password
-- DB_NAME=test
-- 
-For MongoDB:
-- DB_TYPE=mongodb
-- DB_URI=mongodb://localhost/nest
+- DB_NAME=executive
+
+MYSQL SETTINGS
+- MYSQLDB_PORT=3306  # for MySQL
+- MYSQLDB_USERNAME=root
+- MYSQLDB_PASSWORD=
+
+MONGO DB SETTINGS
+- MONGODB_URI=mongodb://localhost:27017/executive # Only required for MongoDB #DEVELOPMENT
+- MONGODB_PORT=27017

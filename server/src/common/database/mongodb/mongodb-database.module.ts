@@ -1,8 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Product } from 'src/products/entities/product.entity';
-import { User } from 'src/users/entities/user.entity';
 
 @Module({
     imports: [
@@ -15,7 +13,7 @@ import { User } from 'src/users/entities/user.entity';
                 useNewUrlParser: true,
                 useUnifiedTopology: true,
 
-                entities: [User, Product],
+                entities: [],
                 synchronize: true,
             }),
             inject: [ConfigService],
