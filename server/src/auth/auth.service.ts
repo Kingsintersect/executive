@@ -68,6 +68,12 @@ export class AuthService {
       };
    }
 
+   // async validateOAuthLogin(user: any): Promise<string> {
+   //    // Handle your user logic here (e.g., checking the database)
+   //    // For simplicity, we're just returning a token directly.
+   //    return 'fake-jwt-token';
+   // }
+
    async update(filter: any, data: any) {
       const result = await this.usersRepository.update(filter, data);
       if (result.affected = 1) return { success: true }

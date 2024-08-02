@@ -9,6 +9,7 @@ import { LocalStrategy } from '../shared/strategy/local.strategy';
 import { ConfigModule } from '@nestjs/config';
 import { JwtStrategy } from '../shared/strategy/jwt.strategy';
 import { SharedModule } from 'src/shared/shared.module';
+import { GoogleStrategy } from 'src/shared/strategy/google.strategy';
 
 @Module({
   imports: [
@@ -20,7 +21,13 @@ import { SharedModule } from 'src/shared/shared.module';
     SharedModule,
   ],
   controllers: [AuthController],
-  providers: [AuthService, UsersRepository, LocalStrategy, JwtStrategy],
+  providers: [
+    AuthService,
+    UsersRepository,
+    LocalStrategy,
+    JwtStrategy,
+    GoogleStrategy,
+  ],
   exports: [AuthService]
 })
 export class AuthModule { }

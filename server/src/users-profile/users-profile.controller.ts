@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { UsersProfileService } from './users-profile.service';
 import { CreateUsersProfileDto } from './dto/create-users-profile.dto';
 import { UpdateUsersProfileDto } from './dto/update-users-profile.dto';
@@ -13,6 +13,7 @@ export class UsersProfileController {
   constructor(private readonly usersProfileService: UsersProfileService) { }
 
   @Post("create")
+  @Roles(UserRole.GUEST, UserRole.EDITOR, UserRole.MANAGER, UserRole.ADMIN)
   create(@Body() createUsersProfileDto: CreateUsersProfileDto) {
     return this.usersProfileService.create(createUsersProfileDto);
   }
@@ -35,34 +36,5 @@ export class UsersProfileController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.usersProfileService.remove(+id);
-  }
-
-
-  @Get('admin')
-  // @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN)
-  getAdminData(@Req() req: any) {
-    return { superAdmin: req.user, message: "super admin roll accessed" };
-  }
-
-  @Get('manager')
-  // @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.MANAGER, UserRole.ADMIN)
-  getManagerData() {
-    return 'This route is allowed for managers';
-  }
-
-  @Get('editor')
-  // @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.EDITOR, UserRole.MANAGER, UserRole.ADMIN)
-  getEditorData() {
-    return 'This route is allowed for editor';
-  }
-
-  @Get('guest')
-  // @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.GUEST, UserRole.EDITOR, UserRole.MANAGER, UserRole.ADMIN)
-  getUserData() {
-    return 'This route is allowed for guests';
   }
 }

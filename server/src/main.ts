@@ -3,7 +3,7 @@ import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
 import { ValidationPipe } from '@nestjs/common';
 import cookieParser from 'cookie-parser';
-// import { RolesGuard } from './shared/guards/roles.guard';
+// import * as csurf from 'csurf';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -11,9 +11,9 @@ async function bootstrap() {
   const port = configService.get('PORT');
 
   app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }));
-  // app.useGlobalGuards(new RolesGuard({ Reflector }));
   app.use(cookieParser());
   app.setGlobalPrefix('api');
+  // app.use(csurf());
   app.enableCors({
     origin: true,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
