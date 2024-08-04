@@ -28,6 +28,6 @@ import { GoogleStrategy } from 'src/shared/strategy/google.strategy';
     JwtStrategy,
     GoogleStrategy,
   ],
-  exports: [AuthService]
+  exports: [AuthService, UsersRepository]
 })
 export class AuthModule { }

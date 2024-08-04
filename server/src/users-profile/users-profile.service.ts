@@ -1,37 +1,65 @@
-import { Injectable } from '@nestjs/common';
-import { CreateUsersProfileDto } from './dto/create-users-profile.dto';
-import { UpdateUsersProfileDto } from './dto/update-users-profile.dto';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { CreateProfileDto } from './dto/create-users-profile.dto';
+import { UpdateProfileDto } from './dto/update-users-profile.dto';
 import { ProfileRepository } from './entities/profile.repository';
+import { AuthService } from 'src/auth/auth.service';
+import { UsersRepository } from 'src/auth/entities/users.repository';
+import { InjectRepository } from '@nestjs/typeorm';
+import { User } from 'src/auth/entities/user.entity';
 
 @Injectable()
-export class UsersProfileService {
-  constructor(private readonly profileRepository: ProfileRepository) { }
+export class ProfileService {
+	constructor(
+		private readonly profileRepository: ProfileRepository,
+		private readonly authService: AuthService,
+		@InjectRepository(User) private readonly userRepository: UsersRepository,
+	) { }
 
-  create(createUsersProfileDto: CreateUsersProfileDto) {
-    return 'This action adds a new usersProfile';
-  }
+	async create(id: number, createProfileDto: CreateProfileDto) {
+		try {
+			const profile = await this.profileRepository.confirmExists({ where: { user: id } })
+			if (profile) {
+				return this.profileRepository.update({ id: profile.id }, createProfileDto);
+			}
 
-  findAll() {
-    return `This action returns all usersProfile`;
-  }
+			const savedProfile = await this.profileRepository.create({ ...createProfileDto, user: id });
+			await this.userRepository.update({ id }, { profile: savedProfile.id });
 
-  findOne(id: number) {
-    return `This action returns a #${id} usersProfile with id`;
-  }
+			return savedProfile;
+		} catch (error) {
+			throw new BadRequestException(error);
+		}
+	}
 
-  update(id: number, updateUserDto: UpdateUsersProfileDto) {
-    return this.profileRepository.update({ id }, updateUserDto);
-  }
+	getProfile(id: number) {
+		try {
+			return this.profileRepository.findOne({ where: { id } });
+		} catch (error) {
+			throw new NotFoundException(error);
+		}
+	}
 
-  remove(id: number) {
-    return `This action removes a #${id} usersProfile`;
-  }
+	async findAll() {
+		return await this.profileRepository.findAll(
+			{ firstName: true, lastName: true },
+			null,
+			{ firstName: "chijioke" }
+		);
+	}
 
-  // UTILITY METHODS
-  async UserExists(userId: number) {
-    const user = await this.profileRepository.confirmExists({
-      where: { userId },
-    });
-    return user || null;
-  }
+	update(id: number, updateUserDto: UpdateProfileDto) {
+		return this.profileRepository.update({ id }, updateUserDto);
+	}
+
+	remove(id: number) {
+		return `This action removes a #${id} usersProfile`;
+	}
+
+	// UTILITY METHODS
+	async UserExists(id: number) {
+		const user = await this.profileRepository.confirmExists({
+			where: { id },
+		});
+		return user || null;
+	}
 }

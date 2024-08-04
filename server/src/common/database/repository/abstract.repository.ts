@@ -1,5 +1,5 @@
 import { Logger, NotFoundException } from "@nestjs/common";
-import { FindOneOptions, FindOptionsWhere, Repository, UpdateResult } from "typeorm";
+import { FindManyOptions, FindOneOptions, FindOptionsWhere, Repository, UpdateResult } from "typeorm";
 import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity";
 import { AbstractEntity } from "./abstract.entity";
 // import { MongoEntity } from "./mongo.entity";
@@ -16,6 +16,41 @@ export abstract class AbstractRepository<TRecord extends AbstractEntity> {
       return await this.repository.save(newRecord);
    }
 
+   async upsert() {
+
+   }
+
+   mergeEntities(entity: any, dto: TRecord) {
+      return this.repository.merge(entity, dto);
+   }
+
+   // OBJECT TYPES
+   // relations: Record<string, never>,
+   // conditions: object,
+   async findAll(
+      fields = {},
+      relations = {},
+      conditions = {},
+      order = {},
+      skip = 0,
+      take = 0,
+      cache = false
+   ): Promise<TRecord[]> {
+      const filters = {};
+
+      if (fields !== null) filters['select'] = fields;
+      if (relations !== null) filters['relations'] = relations;
+      if (conditions !== null) filters['where'] = conditions;
+      if (order !== null) filters['order'] = order;
+      if (skip > 0) filters['skip'] = skip;
+      if (take > 0) filters['take'] = take;
+      if (cache === true) filters['cache'] = cache;
+
+      console.log('filters', filters)
+
+      return await this.repository.find(filters);
+   }
+
    async findOne(filterQuery: FindOneOptions<TRecord>): Promise<TRecord> {
       const record = await this.repository.findOne(filterQuery);
       if (!record) {
@@ -25,10 +60,11 @@ export abstract class AbstractRepository<TRecord extends AbstractEntity> {
       return record;
    }
 
-   async getFields(id: any, fields = []) {
+   // FOR SELECTING AND RETURNING CERTAIN FIELDS: FIELDS is an object that contains the database table field to select
+   async getFields(id: any, fields = {}) {
       const record = await this.repository.findOne({
          where: { id },
-         select: fields, // Select only the username field
+         select: fields, // pass the fiels you want to select...
       });
       if (!record) {
          this.logger.warn("Document not found with filterQuery and its fields");
@@ -36,6 +72,17 @@ export abstract class AbstractRepository<TRecord extends AbstractEntity> {
       }
 
       return record
+   }
+
+   async findBy(searchQuery: FindOptionsWhere<TRecord>): Promise<TRecord[]> {
+      const record = await this.repository.findBy({ ...searchQuery }
+      );
+
+      if (!record) {
+         this.logger.warn("Document not found with filterQuery", searchQuery);
+         throw new NotFoundException('Document not found.');
+      }
+      return record;
    }
 
    // async findOneBy(filterQuery: FindOptionsWhere<TRecord>): Promise<TRecord> {
@@ -47,9 +94,6 @@ export abstract class AbstractRepository<TRecord extends AbstractEntity> {
    //    return record;
    // }
 
-   async findAll(): Promise<TRecord[]> {
-      return await this.repository.find();
-   }
 
    async update(filterQuery: FindOptionsWhere<TRecord>, record: QueryDeepPartialEntity<TRecord>): Promise<UpdateResult> {
       const updatedRecord = await this.repository.update(filterQuery, record);
@@ -76,6 +120,10 @@ export abstract class AbstractRepository<TRecord extends AbstractEntity> {
    // UTILITY METHOSD
    async confirmExists(filterQuery: FindOneOptions<TRecord>): Promise<TRecord | null> {
       return await this.repository.findOne(filterQuery);
+   }
+
+   async exists(searchQuery: FindManyOptions<TRecord>): Promise<boolean> {
+      return await this.repository.exists({ ...searchQuery })
    }
 
    async sendMail(emailData: any) {

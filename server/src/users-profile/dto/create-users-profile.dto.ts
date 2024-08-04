@@ -1,7 +1,7 @@
 import { Transform } from "class-transformer";
-import { IsDate, IsNotEmpty, IsNumber, IsOptional, IsPhoneNumber, IsString, MaxLength } from "class-validator";
+import { IsDate, IsNotEmpty, IsOptional, IsPhoneNumber, IsString, MaxLength } from "class-validator";
 
-export class CreateUsersProfileDto {
+export class CreateProfileDto {
    @IsString()
    @IsNotEmpty()
    firstName: string;
@@ -10,9 +10,9 @@ export class CreateUsersProfileDto {
    @IsNotEmpty()
    lastName: string;
 
-   @IsNumber()
-   @IsNotEmpty()
-   userId: number;
+   // @IsNumber()
+   // @IsNotEmpty()
+   // userId: number;
 
    @IsString()
    @IsOptional()

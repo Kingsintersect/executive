@@ -113,10 +113,7 @@ export class AuthService {
 
    async isPasswordMath(stringValue: string, hashedValue: string) {
       try {
-         console.log('stringValue', stringValue)
-         console.log('hashedValue', hashedValue)
          const result = await bcrypt.compare(stringValue, hashedValue);
-         console.log(result)
          if (!result) {
             throw new UnauthorizedException(`Passwords didn\'t match!`);
          }

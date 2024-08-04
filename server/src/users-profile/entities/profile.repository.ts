@@ -2,14 +2,14 @@ import { Injectable, Logger } from "@nestjs/common";
 import { Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { AbstractRepository } from "src/common/database/repository/abstract.repository";
-import { UsersProfile } from "./users-profile.entity";
+import { Profile } from "./users-profile.entity";
 
 @Injectable()
-export class ProfileRepository extends AbstractRepository<UsersProfile> {
+export class ProfileRepository extends AbstractRepository<Profile> {
    protected readonly logger = new Logger(ProfileRepository.name);
 
    constructor(
-      @InjectRepository(UsersProfile) usersRepository: Repository<UsersProfile>,
+      @InjectRepository(Profile) usersRepository: Repository<Profile>,
    ) {
       super(usersRepository);
    }

@@ -1,6 +1,7 @@
 import { Transform } from "class-transformer";
 import { IsDate, IsEmail, IsEnum, IsNotEmpty, IsOptional, IsString, MinLength } from "class-validator";
 import { UserRole } from "../../shared/types/generic.types";
+// import { CreateProfileDto } from "src/users-profile/dto/create-users-profile.dto";
 
 export class AuthDto {
    @IsEmail()
@@ -28,5 +29,8 @@ export class AuthDto {
    @IsOptional()
    @Transform(({ value }) => value ? new Date(value) : new Date(), { toClassOnly: true })
    createdAt: Date;
+
+   // @IsOptional()
+   // profile?: any;
 
 }

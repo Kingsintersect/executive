@@ -1,17 +1,19 @@
+import { User } from 'src/auth/entities/user.entity';
 import { AbstractEntity } from 'src/common/database/repository/abstract.entity';
-import { Entity, Column, } from 'typeorm';
+import { Entity, Column, OneToOne, JoinColumn, } from 'typeorm';
 
 @Entity()
-export class UsersProfile extends AbstractEntity {
+export class Profile extends AbstractEntity {
    @Column()
    firstName: string;
 
    @Column()
    lastName: string;
 
-   @Column()
-   userId: number;
+   // @Column()
+   // userId: number;
 
+   // optional
    @Column()
    middleName?: string;
 
@@ -21,7 +23,6 @@ export class UsersProfile extends AbstractEntity {
    @Column({ type: 'text', nullable: true })
    bio?: string;
 
-   // optional
    @Column({ nullable: true })
    contry?: string;
 
@@ -36,5 +37,10 @@ export class UsersProfile extends AbstractEntity {
 
    @Column({ nullable: true, type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', onUpdate: 'CURRENT_TIMESTAMP' })
    updatedAt?: Date;
+
+   // RELATIONSHIP
+   @OneToOne(() => User, (user) => user.profile)
+   @JoinColumn()
+   user: number;
 
 }

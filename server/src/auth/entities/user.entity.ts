@@ -1,7 +1,8 @@
 import { Min } from 'class-validator';
 import { AbstractEntity } from 'src/common/database/repository/abstract.entity';
-import { Entity, Column, } from 'typeorm';
+import { Entity, Column, OneToOne, JoinColumn, } from 'typeorm';
 import { UserRole } from '../../shared/types/generic.types';
+import { Profile } from 'src/users-profile/entities/users-profile.entity';
 
 @Entity()
 export class User extends AbstractEntity {
@@ -32,12 +33,14 @@ export class User extends AbstractEntity {
    @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
    createdAt: Date;
 
+   @OneToOne(() => Profile, (profile) => profile.user, { cascade: true })
+   @JoinColumn()
+   profile?: number;
+
+
+
    // @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', onUpdate: 'CURRENT_TIMESTAMP' })
    // updatedAt: Date;
-
-
-
-
 
    // @CreateDateColumn({ type: 'timestamp' })
    // createdAt?: Date;
